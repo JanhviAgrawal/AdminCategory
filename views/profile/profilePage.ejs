@@ -1,0 +1,232 @@
+<%- include('../header') %>
+
+    <main class="flex-1 p-6 md:p-10 overflow-y-auto">
+        <div class="max-w-6xl mx-auto space-y-8">
+
+            <!-- PROFILE HEADER CARD -->
+            <div class="bg-white dark:bg-gray-900 rounded-3xl shadow-sm border border-transparent overflow-hidden">
+                <div class="h-40 bg-primary/20 relative"></div>
+                <div class="px-8 pb-8">
+                    <div
+                        class="relative flex flex-col md:flex-row items-center md:items-end justify-between gap-6 -mt-16">
+                        <div class="flex flex-col md:flex-row items-center md:items-end gap-6">
+                            <div class="relative">
+                                <img id="headerAvatar" src="/<%= admin.profile_image %>"
+                                    class="w-32 h-32 rounded-3xl border-4 border-white dark:border-gray-900 object-cover shadow-2xl bg-white" />
+                            </div>
+                            <div class="text-center md:text-left mb-2">
+                                <h2 class="text-3xl font-bold dark:text-white">
+                                    <%= admin.fname %>
+                                        <%= admin.lname %>
+                                </h2>
+                                <p class="text-gray-500 font-medium">
+                                    <%= admin.city %>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-12 flex gap-8 border-b border-gray-100 dark:border-gray-800 overflow-x-auto">
+                        <button class="pb-4 px-2 tab-active transition-all"
+                            onclick="openTab(event, 'overview-tab')">Overview</button>
+                        <button class="pb-4 px-2 tab-inactive transition-all" onclick="openTab(event, 'edit-tab')">Edit
+                            Profile Details</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- OVERVIEW TAB -->
+            <div class="grid grid-cols-12 gap-8 tab-content" id="overview-tab">
+                <div class="col-span-12 lg:col-span-4 space-y-6">
+                    <div class="bg-white dark:bg-gray-900 rounded-3xl p-6 shadow-sm">
+                        <h3 class="text-sm font-black uppercase text-gray-400 mb-4">Contact & Personal Info</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <p class="text-xs text-gray-400 uppercase">Email</p>
+                                <p class="font-bold dark:text-white">
+                                    <%= admin.email %>
+                                </p>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-400 uppercase">Phone</p>
+                                <p class="font-bold dark:text-white">
+                                    <%= admin.phone %>
+                                </p>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-400 uppercase">Gender</p>
+                                <p class="font-bold dark:text-white">
+                                    <%= admin.gender %>
+                                </p>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-400 uppercase">Location</p>
+                                <p class="font-bold dark:text-white">
+                                    <%= admin.city %>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-span-12 lg:col-span-8 bg-white dark:bg-gray-900 rounded-3xl p-8 shadow-sm">
+                    <h3 class="text-sm font-black uppercase text-gray-400 mb-4">About Bio</h3>
+                    <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
+                        <%= admin.about %>
+                    </p>
+                    <div class="mt-6">
+                        <p class="text-xs text-gray-400 uppercase mb-2">Hobbies</p>
+                        <div class="flex flex-wrap gap-2">
+                            <% admin.hobby.forEach(h=> { %>
+                                <span class="px-3 py-1 bg-primary/20 text-charcoal text-xs font-bold rounded-lg">
+                                    <%= h %>
+                                </span>
+                                <% }) %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EDIT PROFILE TAB -->
+            <div class="hidden tab-content" id="edit-tab">
+                <div class="bg-white dark:bg-gray-900 rounded-3xl p-8 shadow-sm">
+                    <form action="/editAdmin/<%= admin._id %>" method="POST" enctype="multipart/form-data"
+                        class="space-y-8">
+
+                        <!-- Image Upload (profile_image) -->
+                        <div
+                            class="flex flex-col items-center p-6 bg-gray-50 dark:bg-gray-800 rounded-2xl border-2 border-dashed border-gray-200 dark:border-gray-700">
+                            <img id="previewImg" src="/<%= admin.profile_image %>"
+                                class="w-24 h-24 rounded-2xl object-cover mb-4">
+                            <label
+                                class="cursor-pointer bg-charcoal text-white px-6 py-2 rounded-xl text-xs font-bold uppercase">
+                                Change Photo
+                                <input type="file" name="profile_image" class="hidden" onchange="preview(event)">
+                            </label>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- First Name (fname) -->
+                            <div class="space-y-2">
+                                <label class="text-xs font-bold uppercase text-gray-400">First Name</label>
+                                <input type="text" name="fname" value="<%= admin.fname %>" required
+                                    class="w-full p-4 bg-gray-50 dark:bg-gray-800 rounded-xl border-none">
+                            </div>
+
+                            <!-- Last Name (lname) -->
+                            <div class="space-y-2">
+                                <label class="text-xs font-bold uppercase text-gray-400">Last Name</label>
+                                <input type="text" name="lname" value="<%= admin.lname %>" required
+                                    class="w-full p-4 bg-gray-50 dark:bg-gray-800 rounded-xl border-none">
+                            </div>
+
+                            <!-- Email (email) -->
+                            <div class="space-y-2">
+                                <label class="text-xs font-bold uppercase text-gray-400">Email Address</label>
+                                <input type="email" name="email" value="<%= admin.email %>" required
+                                    class="w-full p-4 bg-gray-50 dark:bg-gray-800 rounded-xl border-none">
+                            </div>
+
+                            <!-- Phone (phone) -->
+                            <div class="space-y-2">
+                                <label class="text-xs font-bold uppercase text-gray-400">Phone Number</label>
+                                <input type="text" name="phone" value="<%= admin.phone %>" required
+                                    class="w-full p-4 bg-gray-50 dark:bg-gray-800 rounded-xl border-none">
+                            </div>
+
+                            <!-- City (city) -->
+                            <div class="space-y-2">
+                                <label class="text-xs font-bold uppercase text-gray-400">City</label>
+                                <select name="city"
+                                    class="w-full p-4 bg-gray-50 dark:bg-gray-800 rounded-xl border-none">
+                                    <% ['New York', 'Tokyo' , 'London' , 'Dubai' ].forEach(c=> { %>
+                                        <option value="<%= c %>" <%=admin.city==c ? 'selected' : '' %>><%= c %>
+                                        </option>
+                                        <% }) %>
+                                </select>
+                            </div>
+
+                            <!-- Gender (gender) -->
+                            <div class="space-y-2">
+                                <label class="text-xs font-bold uppercase text-gray-400 block">Gender</label>
+                                <div class="flex gap-4 p-3 bg-gray-50 dark:bg-gray-800 rounded-xl">
+                                    <label class="flex items-center gap-2 dark:text-white cursor-pointer">
+                                        <input type="radio" name="gender" value="Male" <%=admin.gender=='Male'
+                                            ? 'checked' : '' %>> Male
+                                    </label>
+                                    <label class="flex items-center gap-2 dark:text-white cursor-pointer">
+                                        <input type="radio" name="gender" value="Female" <%=admin.gender=='Female'
+                                            ? 'checked' : '' %>> Female
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Hobbies (hobby) - Array -->
+                            <div class="md:col-span-2 space-y-2">
+                                <label class="text-xs font-bold uppercase text-gray-400">Hobbies</label>
+                                <div class="flex flex-wrap gap-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-xl">
+                                    <% ['Design', 'Code' , 'Travel' , 'Music' ].forEach(h=> { %>
+                                        <label class="flex items-center gap-2 dark:text-white cursor-pointer">
+                                            <input type="checkbox" name="hobby[]" value="<%= h %>"
+                                                <%=admin.hobby.includes(h) ? 'checked' : '' %>> <%= h %>
+                                        </label>
+                                        <% }) %>
+                                </div>
+                            </div>
+
+                            <!-- About (about) -->
+                            <div class="md:col-span-2 space-y-2">
+                                <label class="text-xs font-bold uppercase text-gray-400">About Bio</label>
+                                <textarea name="about" rows="4" required
+                                    class="w-full p-4 bg-gray-50 dark:bg-gray-800 rounded-xl border-none"><%= admin.about %></textarea>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end">
+                            <button type="submit"
+                                class="bg-primary text-charcoal px-10 py-4 rounded-xl font-black uppercase text-xs shadow-lg shadow-primary/30 hover:scale-105 transition-transform">
+                                Save Profile
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function openTab(evt, name) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+            document.querySelectorAll('button[onclick^="openTab"]').forEach(b => {
+                b.classList.remove('tab-active'); b.classList.add('tab-inactive');
+            });
+            document.getElementById(name).classList.remove('hidden');
+            evt.currentTarget.classList.add('tab-active');
+            evt.currentTarget.classList.remove('tab-inactive');
+        }
+
+        function preview(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const url = URL.createObjectURL(file);
+                document.getElementById('previewImg').src = url;
+                document.getElementById('headerAvatar').src = url;
+            }
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.18/dist/sweetalert2.all.min.js"></script>
+    <script>
+        if (<%= locals.flash.success !== "" && locals.flash.success.length > 0 %>) {
+            Swal.fire({
+                title: "Success!",
+                text: "<%= locals.flash.success %>",
+                icon: "success"
+            });
+        }
+        if (<%= locals.flash.error !== "" && locals.flash.error.length > 0 %>) {
+            Swal.fire({
+                title: "Error!",
+                text: "<%= locals.flash.error %>",
+                icon: "error"
+            });
+        }
+    </script>

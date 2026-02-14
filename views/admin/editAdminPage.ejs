@@ -1,0 +1,169 @@
+<%- include('../header') %>
+
+    <main class="flex-1 flex flex-col min-w-0">
+        <div class="p-10 max-w-5xl mx-auto w-full">
+
+            <!-- PAGE TITLE -->
+            <div class="mb-10 flex items-end justify-between">
+                <div>
+                    <h2 class="text-4xl font-black text-charcoal tracking-tighter uppercase">
+                        Edit Admin
+                    </h2>
+                    <div class="h-1.5 w-20 bg-primary mt-3 rounded-full"></div>
+                </div>
+            </div>
+
+            <!-- CARD -->
+            <div class="bg-white dark:bg-gray-900 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.04)] overflow-hidden">
+
+                <!-- FIXED: Action URL matches the route in index.js -->
+                <form class="p-12" action="/editAdmin/<%= singleAdmin._id %>" method="POST"
+                    enctype="multipart/form-data">
+
+                    <!-- PROFILE IMAGE -->
+                    <div class="flex flex-col items-center mb-12">
+                        <div class="relative group">
+
+                            <div
+                                class="size-40 rounded-full border-2 border-dashed border-primary/40 p-2 flex items-center justify-center">
+                                <!-- FIXED: Corrected redundant path -->
+                                <img id="profilePreview" src="/<%= singleAdmin.profile_image %>"
+                                    class="size-full rounded-full object-cover shadow-lg bg-white" name="profile_image"
+                                    alt="Profile Image">
+                            </div>
+
+                            <label
+                                class="absolute bottom-2 right-2 size-11 bg-charcoal text-white rounded-full border-4 border-white shadow-xl flex items-center justify-center hover:bg-primary hover:text-charcoal transition-all cursor-pointer">
+                                <span class="material-symbols-outlined text-lg">photo_camera</span>
+                                <input type="file" name="profile_image" accept="image/*" hidden
+                                    onchange="previewProfileImage(event)">
+                            </label>
+                        </div>
+
+                        <p class="mt-4 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">
+                            Update Profile Image
+                        </p>
+                    </div>
+
+                    <!-- BASIC INFO -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-8">
+
+                        <div class="space-y-3">
+                            <label class="text-[11px] font-black uppercase tracking-widest ml-1">First Name</label>
+                            <input name="fname" value="<%= singleAdmin.fname %>"
+                                class="w-full px-6 py-4 bg-[#F1F7F7]/50 rounded-2xl text-sm font-bold border-2 border-transparent outline-none focus:border-primary/30 transition-all">
+                        </div>
+
+                        <div class="space-y-3">
+                            <label class="text-[11px] font-black uppercase tracking-widest ml-1">Last Name</label>
+                            <input name="lname" value="<%= singleAdmin.lname %>"
+                                class="w-full px-6 py-4 bg-[#F1F7F7]/50 rounded-2xl text-sm font-bold border-2 border-transparent outline-none focus:border-primary/30 transition-all">
+                        </div>
+
+                        <div class="space-y-3">
+                            <label class="text-[11px] font-black uppercase tracking-widest ml-1">Email Address</label>
+                            <input name="email" value="<%= singleAdmin.email %>"
+                                class="w-full px-6 py-4 bg-[#F1F7F7]/50 rounded-2xl text-sm font-bold border-2 border-transparent outline-none focus:border-primary/30 transition-all">
+                        </div>
+
+                        <div class="space-y-3">
+                            <label class="text-[11px] font-black uppercase tracking-widest ml-1">Phone Number</label>
+                            <input name="phone" value="<%= singleAdmin.phone %>"
+                                class="w-full px-6 py-4 bg-[#F1F7F7]/50 rounded-2xl text-sm font-bold border-2 border-transparent outline-none focus:border-primary/30 transition-all">
+                        </div>
+
+                        <div class="space-y-3">
+                            <label class="text-[11px] font-black uppercase tracking-widest ml-1">City</label>
+                            <select name="city"
+                                class="w-full px-6 py-4 bg-[#F1F7F7]/50 rounded-2xl text-sm font-bold border-2 border-transparent outline-none focus:border-primary/30 transition-all appearance-none cursor-pointer">
+
+                                <option value="">Select city</option>
+                                <option value="New York" <%=singleAdmin.city==='New York' ? 'selected' : '' %>>New York
+                                </option>
+                                <option value="San Francisco" <%=singleAdmin.city==='San Francisco' ? 'selected' : '' %>
+                                    >San Francisco</option>
+                                <option value="London" <%=singleAdmin.city==='London' ? 'selected' : '' %>>London
+                                </option>
+                                <option value="Tokyo" <%=singleAdmin.city==='Tokyo' ? 'selected' : '' %>>Tokyo</option>
+                                <option value="Dubai" <%=singleAdmin.city==='Dubai' ? 'selected' : '' %>>Dubai</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- GENDER -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mt-10">
+                        <div class="space-y-4">
+                            <label class="text-[11px] font-black uppercase tracking-widest ml-1 block">
+                                Gender Selection
+                            </label>
+
+                            <div class="flex flex-wrap gap-4">
+                                <% ['Male','Female'].forEach(g=> { %>
+                                    <label class="flex items-center gap-3 px-6 py-3 rounded-2xl cursor-pointer border-2 transition-all
+                                    <%= singleAdmin.gender === g
+                                        ? 'bg-primary/10 border-primary'
+                                        : 'bg-[#F1F7F7]/50 border-transparent hover:border-primary/20' %>">
+                                        <input type="radio" name="gender" value="<%= g %>" <%=singleAdmin.gender===g
+                                            ? 'checked' : '' %>
+                                        class="text-primary focus:ring-0">
+                                        <span class="text-xs font-bold uppercase tracking-wider">
+                                            <%= g %>
+                                        </span>
+                                    </label>
+                                    <% }) %>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ABOUT -->
+                    <div class="mt-10 space-y-3">
+                        <label class="text-[11px] font-black uppercase tracking-widest ml-1">About Bio</label>
+                        <textarea name="about" rows="5"
+                            class="w-full px-6 py-4 bg-[#F1F7F7]/50 rounded-3xl text-sm font-bold border-2 border-transparent resize-none outline-none focus:border-primary/30 transition-all"><%= singleAdmin.about %></textarea>
+                    </div>
+
+                    <!-- ACTIONS -->
+                    <div class="mt-12 pt-10 border-t border-gray-100 flex items-center justify-end gap-8">
+                        <a href="/viewAdminPage"
+                            class="text-xs font-black text-gray-400 hover:text-charcoal transition-colors uppercase tracking-[0.2em]">
+                            Cancel Edit
+                        </a>
+
+                        <button type="submit" class="bg-primary hover:scale-[1.02] active:scale-[0.98]
+                                   text-charcoal px-12 py-5 rounded-2xl font-black text-xs
+                                   transition-all shadow-xl shadow-primary/40 uppercase tracking-[0.2em]">
+                            Update Admin
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function previewProfileImage(event) {
+            const img = document.getElementById('profilePreview');
+            if (event.target.files[0]) {
+                img.src = URL.createObjectURL(event.target.files[0]);
+            }
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.18/dist/sweetalert2.all.min.js"></script>
+    <script>
+        if (<%= locals.flash.success !== "" && locals.flash.success.length > 0 %>) {
+            Swal.fire({
+                title: "Success!",
+                text: "<%= locals.flash.success %>",
+                icon: "success"
+            });
+        }
+        if (<%= locals.flash.error !== "" && locals.flash.error.length > 0 %>) {
+            Swal.fire({
+                title: "Error!",
+                text: "<%= locals.flash.error %>",
+                icon: "error"
+            });
+        }
+    </script>

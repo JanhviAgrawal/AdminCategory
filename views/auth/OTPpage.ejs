@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Verify OTP | Admin Panel</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f6cdcb",
+                        "primary-focus": "#F7CBCA",
+                        "background-light": "#fafafa",
+                        "background-dark": "#1a1f1f",
+                        "charcoal": "#5D6B6B",
+                        "admin-dark": "#1a0f0f",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer components {
+            body {
+                font-family: 'Manrope', sans-serif;
+            }
+            input::-webkit-outer-spin-button,
+            input::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+            input[type=number] {
+                -moz-appearance: textfield;
+            }
+            .otp-input {
+                @apply w-10 h-14 sm:w-14 sm:h-16 text-center text-2xl font-bold bg-white dark:bg-background-dark/30 border-2 border-[#e5d2d1] dark:border-white/10 rounded-lg text-admin-dark dark:text-white transition-all outline-none appearance-none;
+            }
+            .otp-input:focus {
+                @apply border-primary-focus ring-4 ring-primary-focus/20;
+            }
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark min-h-screen flex flex-col font-display transition-colors duration-300">
+
+    <header
+        class="w-full flex items-center justify-between whitespace-nowrap border-b border-solid border-[#f2e9e8] dark:border-white/10 px-6 lg:px-10 py-3 bg-white dark:bg-background-dark/50 backdrop-blur-sm sticky top-0 z-50">
+        <div class="flex items-center gap-4 text-admin-dark dark:text-white">
+            <div class="size-6 text-primary">
+                <svg fill="currentColor" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M42.4379 44C42.4379 44 36.0744 33.9038 41.1692 24C46.8624 12.9336 42.2078 4 42.2078 4L7.01134 4C7.01134 4 11.6577 12.932 5.96912 23.9969C0.876273 33.9029 7.27094 44 7.27094 44L42.4379 44Z">
+                    </path>
+                </svg>
+            </div>
+            <h2 class="text-admin-dark dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">Admin Panel
+            </h2>
+        </div>
+        <div class="flex items-center gap-4">
+            <button class="p-2 text-charcoal hover:text-admin-dark dark:text-gray-400 dark:hover:text-white"
+                onclick="document.documentElement.classList.toggle('dark')">
+                <span class="material-symbols-outlined">dark_mode</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="flex-1 flex items-center justify-center p-6 relative overflow-hidden">
+        <div class="absolute top-1/4 -left-20 w-64 h-64 bg-primary/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div
+            class="w-full max-w-[520px] bg-white dark:bg-[#252a2a] p-8 md:p-12 rounded-xl shadow-lg border border-[#f2e9e8] dark:border-white/5 relative z-10">
+            <div class="mb-8 text-center">
+                <div class="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <span
+                        class="material-symbols-outlined text-admin-dark dark:text-white text-3xl">verified_user</span>
+                </div>
+                <h1 class="text-admin-dark dark:text-white tracking-tight text-[32px] font-extrabold">Verify OTP</h1>
+                <p class="text-charcoal dark:text-gray-400 text-base font-medium mt-3">
+                    We sent a 6-digit security code to your email.
+                </p>
+            </div>
+
+            <!-- FORM START -->
+            <form action="/otp-verify" method="POST" id="otpForm" class="space-y-8">
+
+                <!-- This hidden input sends the combined 6 digits to the server -->
+                <input type="hidden" name="adminOTP" id="adminOTP">
+
+                <div class="flex justify-center">
+                    <div class="grid grid-cols-6 gap-2 sm:gap-3 w-full max-w-sm mx-auto">
+                        <input type="text" maxlength="1" inputmode="numeric" class="otp-input digit-box" autofocus />
+                        <input type="text" maxlength="1" inputmode="numeric" class="otp-input digit-box" />
+                        <input type="text" maxlength="1" inputmode="numeric" class="otp-input digit-box" />
+                        <input type="text" maxlength="1" inputmode="numeric" class="otp-input digit-box" />
+                        <input type="text" maxlength="1" inputmode="numeric" class="otp-input digit-box" />
+                        <input type="text" maxlength="1" inputmode="numeric" class="otp-input digit-box" />
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-4">
+                    <button
+                        class="w-full flex cursor-pointer items-center justify-center rounded-lg h-14 bg-primary hover:bg-[#f3b7b4] text-admin-dark text-lg font-bold transition-all transform active:scale-[0.98]"
+                        type="submit">
+                        <span class="truncate">Verify Code</span>
+                    </button>
+                    <div class="text-center pt-2">
+                        <p class="text-gray-500 dark:text-gray-400 text-sm font-medium">
+                            Didn't receive the code?
+                            <a class="text-charcoal dark:text-primary font-bold hover:underline ml-1"
+                                href="/verify-email">Resend Code</a>
+                        </p>
+                    </div>
+                </div>
+            </form>
+
+            <div class="mt-10 pt-8 border-t border-[#f2e9e8] dark:border-white/5 flex justify-center">
+                <a class="flex items-center gap-2 text-charcoal/70 dark:text-gray-400 hover:text-admin-dark dark:hover:text-white text-sm font-bold transition-colors group"
+                    href="/">
+                    <span
+                        class="material-symbols-outlined text-lg transition-transform group-hover:-translate-x-1">arrow_back</span>
+                    Back to Login
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const inputs = document.querySelectorAll('.digit-box');
+        const hiddenInput = document.getElementById('adminOTP');
+        const form = document.getElementById('otpForm');
+
+        // Handle auto-focus and typing logic
+        inputs.forEach((input, index) => {
+            input.addEventListener('keyup', (e) => {
+                if (e.target.value.length === 1 && index < inputs.length - 1) {
+                    inputs[index + 1].focus();
+                }
+            });
+
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && !e.target.value && index > 0) {
+                    inputs[index - 1].focus();
+                }
+            });
+        });
+
+        // Combine all digits into the hidden input before submitting the form
+        form.addEventListener('submit', (e) => {
+            let combinedValue = "";
+            inputs.forEach(input => {
+                combinedValue += input.value;
+            });
+
+            if (combinedValue.length < 6) {
+                e.preventDefault();
+                alert("Please enter the full 6-digit OTP code.");
+            } else {
+                hiddenInput.value = combinedValue;
+            }
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.18/dist/sweetalert2.all.min.js"></script>
+    <script>
+        if (<%= locals.flash.success !== "" && locals.flash.success.length > 0 %>) {
+            Swal.fire({
+                title: "Success!",
+                text: "<%= locals.flash.success %>",
+                icon: "success"
+            });
+        }
+        if (<%= locals.flash.error !== "" && locals.flash.error.length > 0 %>) {
+            Swal.fire({
+                title: "Error!",
+                text: "<%= locals.flash.error %>",
+                icon: "error"
+            });
+        }
+    </script>
+
+    <footer class="py-8 px-6 text-center">
+        <p class="text-charcoal/50 dark:text-gray-500 text-xs font-medium">
+            © 2024 Admin Panel. All rights reserved. Secure verification.
+        </p>
+    </footer>
+
+</body>
+
+</html>

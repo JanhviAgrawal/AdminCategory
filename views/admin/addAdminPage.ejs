@@ -1,0 +1,178 @@
+<%- include('../header') %>
+
+    <main class="flex-1 p-6 md:px-10 pb-10 flex justify-center">
+        <div
+            class="bg-white dark:bg-gray-900 w-full max-w-4xl rounded-3xl shadow-xl border border-gray-100 dark:border-gray-800 p-8 md:p-12 self-start">
+
+            <!-- FIXED: Action changed to /insertAdmin and removed singleAdmin variable -->
+            <form class="space-y-8" action="/insertAdmin" method="POST" enctype="multipart/form-data">
+
+                <!-- ================= PROFILE IMAGE ================= -->
+                <div class="flex flex-col items-center justify-center mb-10">
+                    <div class="relative group">
+                        <div
+                            class="w-36 h-36 rounded-full border-4 border-primary/30 dark:border-gray-700 flex items-center justify-center bg-gray-50 dark:bg-gray-800 overflow-hidden shadow-inner">
+                            <span id="defaultAvatar" class="material-icons-round text-6xl text-gray-300">
+                                account_circle
+                            </span>
+                            <img id="profilePreview" class="hidden w-full h-full object-cover rounded-full" />
+                        </div>
+
+                        <label
+                            class="absolute bottom-2 right-2 bg-charcoal text-white p-2.5 rounded-full shadow-lg cursor-pointer hover:bg-charcoal/90 transition-all">
+                            <span class="material-icons-round text-sm">photo_camera</span>
+                            <input type="file" name="profile_image" class="hidden" accept="image/*"
+                                onchange="previewProfileImage(event)" required />
+                        </label>
+                    </div>
+
+                    <p class="text-xs font-bold uppercase tracking-widest text-charcoal/40 dark:text-gray-500 mt-4">
+                        Upload Admin Photo
+                    </p>
+                </div>
+
+                <!-- ================= FORM FIELDS ================= -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-8">
+
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold uppercase tracking-wider text-charcoal/60 px-1">First
+                            Name</label>
+                        <input name="fname"
+                            class="w-full px-6 py-4 rounded-full bg-gray-50 dark:bg-gray-800 border-none outline-none"
+                            placeholder="Enter first name" required />
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold uppercase tracking-wider text-charcoal/60 px-1">Last
+                            Name</label>
+                        <input name="lname"
+                            class="w-full px-6 py-4 rounded-full bg-gray-50 dark:bg-gray-800 border-none outline-none"
+                            placeholder="Enter last name" required />
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold uppercase tracking-wider text-charcoal/60 px-1">Email
+                            Address</label>
+                        <input type="email" name="email"
+                            class="w-full px-6 py-4 rounded-full bg-gray-50 dark:bg-gray-800 border-none outline-none"
+                            placeholder="admin@example.com" required />
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold uppercase tracking-wider text-charcoal/60 px-1">Password</label>
+                        <input type="password" name="password"
+                            class="w-full px-6 py-4 rounded-full bg-gray-50 dark:bg-gray-800 border-none outline-none"
+                            placeholder="••••••••" required />
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold uppercase tracking-wider text-charcoal/60 px-1">Phone
+                            Number</label>
+                        <input name="phone"
+                            class="w-full px-6 py-4 rounded-full bg-gray-50 dark:bg-gray-800 border-none outline-none"
+                            placeholder="Enter phone" required />
+                    </div>
+
+                    <div class="space-y-2 md:col-span-2">
+                        <label class="text-xs font-bold uppercase tracking-wider text-charcoal/60 px-1">City</label>
+                        <select name="city"
+                            class="w-full px-6 py-4 rounded-full bg-gray-50 dark:bg-gray-800 border-none outline-none"
+                            required>
+                            <option value="">Select city</option>
+                            <option value="New York">New York</option>
+                            <option value="San Francisco">San Francisco</option>
+                            <option value="London">London</option>
+                            <option value="Tokyo">Tokyo</option>
+                            <option value="Dubai">Dubai</option>
+                        </select>
+                    </div>
+
+                    <div class="space-y-4 md:col-span-2">
+                        <label
+                            class="text-xs font-bold uppercase tracking-wider text-charcoal/60 px-1 block">Gender</label>
+                        <div class="flex gap-8 px-1">
+                            <label class="flex items-center gap-2.5 cursor-pointer">
+                                <input type="radio" name="gender" value="Male" required>
+                                <span class="text-sm font-medium">Male</span>
+                            </label>
+                            <label class="flex items-center gap-2.5 cursor-pointer">
+                                <input type="radio" name="gender" value="Female">
+                                <span class="text-sm font-medium">Female</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4 md:col-span-2">
+                        <label
+                            class="text-xs font-bold uppercase tracking-wider text-charcoal/60 px-1 block">Hobbies</label>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 px-1">
+                            <label class="flex items-center gap-2.5 cursor-pointer">
+                                <input type="checkbox" name="hobby[]" value="Design">
+                                <span class="text-sm font-medium">Design</span>
+                            </label>
+                            <label class="flex items-center gap-2.5 cursor-pointer">
+                                <input type="checkbox" name="hobby[]" value="Code">
+                                <span class="text-sm font-medium">Code</span>
+                            </label>
+                            <label class="flex items-center gap-2.5 cursor-pointer">
+                                <input type="checkbox" name="hobby[]" value="Travel">
+                                <span class="text-sm font-medium">Travel</span>
+                            </label>
+                            <label class="flex items-center gap-2.5 cursor-pointer">
+                                <input type="checkbox" name="hobby[]" value="Reading">
+                                <span class="text-sm font-medium">Reading</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="md:col-span-2 space-y-2">
+                        <label class="text-xs font-bold uppercase tracking-wider text-charcoal/60 px-1">About /
+                            Biography</label>
+                        <textarea name="about" rows="4"
+                            class="w-full px-6 py-4 rounded-2xl bg-gray-50 dark:bg-gray-800 border-none outline-none"
+                            required></textarea>
+                    </div>
+                </div>
+
+                <div
+                    class="flex flex-col-reverse sm:flex-row items-center justify-end gap-6 pt-10 border-t border-gray-100 dark:border-gray-800">
+                    <a href="/viewAdminPage"
+                        class="text-xs font-bold uppercase tracking-widest text-gray-400 hover:text-charcoal transition-colors">Cancel</a>
+                    <button type="submit"
+                        class="w-full sm:w-auto px-12 py-4 bg-primary text-charcoal font-bold rounded-full shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all uppercase tracking-widest text-sm">
+                        Add Admin
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        function previewProfileImage(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const preview = document.getElementById('profilePreview');
+            const avatar = document.getElementById('defaultAvatar');
+            preview.src = URL.createObjectURL(file);
+            preview.classList.remove('hidden');
+            if (avatar) avatar.classList.add('hidden');
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.18/dist/sweetalert2.all.min.js"></script>
+    <script>
+        if (<%= locals.flash.success !== "" && locals.flash.success.length > 0 %>) {
+            Swal.fire({
+                title: "Success!",
+                text: "<%= locals.flash.success %>",
+                icon: "success"
+            });
+        }
+        if (<%= locals.flash.error !== "" && locals.flash.error.length > 0 %>) {
+            Swal.fire({
+                title: "Error!",
+                text: "<%= locals.flash.error %>",
+                icon: "error"
+            });
+        }
+    </script>
