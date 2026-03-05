@@ -1,0 +1,132 @@
+<%- include('../header') %>
+    <main class="min-h-screen bg-gray-50/50 dark:bg-[#0B0F1A] pb-20">
+        <div class="max-w-7xl mx-auto px-4 pt-10">
+            <!-- Header Section -->
+            <div class="flex flex-col md:flex-row justify-between items-center mb-12 gap-6">
+                <div>
+                    <h1 class="text-4xl font-black text-slate-900 dark:text-white tracking-tight">
+                        Extra <span class="text-primary">Categories</span>
+                    </h1>
+
+                </div>
+                <a href="/extraCategory/addExtraCategoryPage"
+                    class="bg-primary text-charcoal px-8 py-4 rounded-2xl font-bold flex items-center gap-2 shadow-xl shadow-primary/30 hover:shadow-primary/50 hover:-translate-y-1 active:scale-95 transition-all duration-300">
+                    <span class="material-symbols-outlined">add_circle</span> Create New
+                </a>
+            </div>
+
+            <!-- Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <% allExtraCategory.forEach(item=> { %>
+                    <div
+                        class="group relative bg-white dark:bg-gray-900 rounded-[2.5rem] border border-gray-100 dark:border-gray-800 overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500">
+
+                        <!-- Image Container -->
+                        <div class="relative aspect-[11/12] overflow-hidden">
+                            <img src="/<%= item.extraCategoryImage %>"
+                                class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
+
+                            <!-- Intelligent Overlay: Darkens on hover -->
+                            <div
+                                class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-90 transition-opacity duration-500">
+                            </div>
+
+                            <!-- Hierarchy Badges (Top Left) -->
+                            <div class="absolute top-5 left-5 flex flex-col gap-2">
+                                <!-- Parent Category Badge -->
+                                <span
+                                    class="bg-white/10 backdrop-blur-md border border-white/20 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider text-white shadow-xl">
+                                    <%= item.category_id ? item.category_id.categoryName : 'Deleted' %>
+                                </span>
+
+                                <!-- Sub Category Badge (TEXT COLOR UPDATED TO PRIMARY) -->
+                                <span
+                                    class="bg-primary/20 backdrop-blur-md border border-primary/30 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider text-primary shadow-xl">
+                                    <%= item.subCategory_id ? item.subCategory_id.subCategoryName : 'Deleted' %>
+                                </span>
+                            </div>
+
+                            <!-- ACTION BUTTONS -->
+                            <div
+                                class="absolute inset-0 flex items-center justify-center gap-4 translate-y-8 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 ease-out z-10">
+
+                                <!-- EDIT BUTTON -->
+                                <a href="/extraCategory/editExtraCategoryPage/<%= item._id %>"
+                                    class="w-12 h-12 flex items-center justify-center bg-white dark:bg-slate-800 text-slate-700 dark:text-white rounded-2xl shadow-2xl hover:bg-primary hover:text-charcoal hover:-translate-y-1 transition-all duration-300 group/btn"
+                                    title="Edit">
+                                    <span
+                                        class="material-symbols-outlined !text-[22px] leading-none select-none transition-transform duration-300 group-hover/btn:scale-110">
+                                        edit_square
+                                    </span>
+                                </a>
+
+                                <!-- DELETE BUTTON -->
+                                <button onclick="confirmDelete('<%= item._id %>')"
+                                    class="w-12 h-12 flex items-center justify-center bg-white dark:bg-slate-800 text-red-500 rounded-2xl shadow-2xl hover:bg-red-500 hover:text-white hover:-translate-y-1 transition-all duration-300 group/btn"
+                                    title="Delete">
+                                    <span
+                                        class="material-symbols-outlined !text-[22px] leading-none select-none transition-transform duration-300 group-hover/btn:scale-110">
+                                        delete
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Content Section -->
+                        <div class="p-6 text-center">
+                            <h3
+                                class="text-xl font-bold text-slate-800 dark:text-white group-hover:text-primary transition-colors duration-300">
+                                <%= item.extraCategoryName %>
+                            </h3>
+                            
+                        </div>
+                    </div>
+                    <% }) %>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function confirmDelete(id) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "This extra-category will be permanently removed!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#EF4444",
+                cancelButtonColor: "#64748B",
+                confirmButtonText: "Yes, delete it!",
+                background: document.documentElement.classList.contains('dark') ? '#111827' : '#fff',
+                color: document.documentElement.classList.contains('dark') ? '#fff' : '#000',
+                customClass: {
+                    popup: 'rounded-[2rem]',
+                    confirmButton: 'rounded-xl px-6 py-3 font-bold',
+                    cancelButton: 'rounded-xl px-6 py-3 font-bold'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Smooth exit animation before redirect
+                    window.location.href = `/extraCategory/deleteExtraCategory/${id}`;
+                }
+            });
+        }
+
+        <% if (locals.flash && locals.flash.success && locals.flash.success.length > 0) { %>
+        Swal.fire({
+            title: "Success!",
+            text: "<%= locals.flash.success %>",
+            icon: "success",
+            timer: 3000,
+            showConfirmButton: false
+        });
+        <% } %>
+
+        <% if (locals.flash && locals.flash.error && locals.flash.error.length > 0) { %>
+        Swal.fire({
+            title: "Error!",
+            text: "<%= locals.flash.error %>",
+            icon: "error"
+        });
+        <% } %>
+    </script>

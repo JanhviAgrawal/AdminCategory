@@ -1,0 +1,90 @@
+<%- include('../header') %>
+    <main class="flex-1 p-6 md:px-10 pb-10 flex justify-center">
+        <div
+            class="bg-white dark:bg-gray-900 w-full max-w-4xl rounded-3xl shadow-xl border border-gray-100 dark:border-gray-800 p-8 md:p-12 self-start">
+
+            <form class="space-y-8" action="/category/addCategory" method="POST" enctype="multipart/form-data">
+
+                <!-- ================= CATEGORY IMAGE ================= -->
+                <div class="flex flex-col items-center justify-center mb-10">
+                    <div class="relative group">
+                        <div
+                            class="w-36 h-36 rounded-full border-4 border-primary/30 dark:border-gray-700 flex items-center justify-center bg-gray-50 dark:bg-gray-800 overflow-hidden shadow-inner">
+                            <span id="defaultIcon" class="material-icons-round text-6xl text-gray-300">
+                                category
+                            </span>
+                            <img id="imagePreview" class="hidden w-full h-full object-cover rounded-full" />
+                        </div>
+
+                        <label
+                            class="absolute bottom-2 right-2 bg-charcoal text-white p-2.5 rounded-full shadow-lg cursor-pointer hover:bg-charcoal/90 transition-all">
+                            <span class="material-icons-round text-sm">photo_camera</span>
+                            <input type="file" name="categoryImage" class="hidden" accept="image/*"
+                                onchange="previewImage(event)" required />
+                        </label>
+                    </div>
+
+                    <p class="text-xs font-bold uppercase tracking-widest text-charcoal/40 dark:text-gray-500 mt-4">
+                        Upload Category Image
+                    </p>
+                </div>
+
+                <!-- ================= FORM FIELDS ================= -->
+                <div class="grid grid-cols-1 gap-y-8">
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold uppercase tracking-wider text-charcoal/60 px-1">
+                            Category Name
+                        </label>
+                        <input name="categoryName"
+                            class="w-full px-6 py-4 rounded-full bg-gray-50 dark:bg-gray-800 border-none outline-none"
+                            placeholder="Enter category name" required />
+                    </div>
+                </div>
+
+                <!-- ================= ACTION BUTTONS ================= -->
+                <div
+                    class="flex flex-col-reverse sm:flex-row items-center justify-end gap-6 pt-10 border-t border-gray-100 dark:border-gray-800">
+                    <!-- FIXED: Made sure Cancel takes you back to viewCategory -->
+                    <a href="/category/viewCategory"
+                        class="text-xs font-bold uppercase tracking-widest text-gray-400 hover:text-charcoal transition-colors">Cancel</a>
+                    <button type="submit"
+                        class="w-full sm:w-auto px-12 py-4 bg-primary text-charcoal font-bold rounded-full shadow-xl shadow-primary/20 hover:scale-105 active:scale-95 transition-all uppercase tracking-widest text-sm">
+                        Add Category
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script>
+
+        function previewImage(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const preview = document.getElementById('imagePreview');
+            const avatar = document.getElementById('defaultIcon');
+            preview.src = URL.createObjectURL(file);
+            preview.classList.remove('hidden');
+            if (avatar) avatar.classList.add('hidden');
+        }
+
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.18/dist/sweetalert2.all.min.js"></script>
+    <script>
+            <% if (locals.flash && locals.flash.success && locals.flash.success.length > 0) { %>
+            Swal.fire({
+                title: "Success!",
+                text: "<%= locals.flash.success %>",
+                icon: "success"
+            });
+            <% } %>
+
+            <% if (locals.flash && locals.flash.error && locals.flash.error.length > 0) { %>
+            Swal.fire({
+                title: "Error!",
+                text: "<%= locals.flash.error %>",
+                icon: "error"
+            });
+            <% } %>
+    </script>

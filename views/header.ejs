@@ -60,6 +60,33 @@
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
+         summary::-webkit-details-marker { display: none; }
+
+    /* --- Theme Active State --- */
+    .active-link {
+        background-color: rgba(247, 203, 202, 0.15) !important; /* Soft version of #f7cbca */
+        color: #f7cbca !important;
+    }
+    
+    /* Ensure icon in active link also takes theme color */
+    .active-link .material-icons-round {
+        color: #f7cbca !important;
+    }
+
+    .active-sub-link {
+        color: #f7cbca !important;
+        font-weight: 600;
+    }
+
+    /* Active Dot styling */
+    .active-sub-link .dot {
+        background-color: #f7cbca !important;
+        box-shadow: 0 0 0 4px rgba(247, 203, 202, 0.2); 
+    }
+
+    /* Custom Scrollbar for Sidebar */
+    #sidebar-nav::-webkit-scrollbar { width: 4px; }
+    #sidebar-nav::-webkit-scrollbar-thumb { background: #f7cbca; border-radius: 10px; }
     </style>
 </head>
 
@@ -68,7 +95,7 @@
 
     <!-- Sidebar -->
     <aside
-        class="w-20 md:w-64 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 flex flex-col items-center md:items-stretch py-8 px-4 shrink-0">
+        class="w-20 md:w-[17rem] bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 flex flex-col items-center md:items-stretch py-8 px-4 shrink-0">
 
         <div class="flex items-center gap-3 px-2 mb-10">
             <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center shadow-lg shadow-primary/20">
@@ -77,25 +104,142 @@
             <span class="text-xl font-bold hidden md:block tracking-tight dark:text-white">Lumina.</span>
         </div>
 
-        <nav class="flex-1 space-y-2">
-            <!-- Fixed Dashboard Link -->
-            <a href="/dashboard"
-                class="flex items-center gap-4 px-4 py-3 bg-primary/10 text-charcoal dark:text-primary rounded-xl transition-all">
-                <span class="material-icons-round">grid_view</span>
-                <span class="font-medium hidden md:block">Dashboard</span>
-            </a>
-            <a href="/addAdminPage"
-                class="flex items-center gap-4 px-4 py-3 text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl transition-all">
-                <span class="material-icons-round">person_add</span>
-                <span class="font-medium hidden md:block">Add Admin</span>
-            </a>
-            <a href="/viewAdminPage"
-                class="flex items-center gap-4 px-4 py-3 text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl transition-all">
-                <span class="material-icons-round">assignment</span>
-                <span class="font-medium hidden md:block">All Admins</span>
-            </a>
-        </nav>
+        <nav id="sidebar-nav"
+            class="flex-1 space-y-1 px-3 py-4 bg-white dark:bg-gray-900 h-screen w-64 border-r border-gray-200 dark:border-gray-800">
 
+            <!-- Dashboard -->
+            <a href="/dashboard"
+                class="nav-link flex items-center gap-4 px-4 py-3 text-gray-500 hover:bg-[#f7cbca]/10 hover:text-[#f7cbca] rounded-xl transition-all group">
+                <span class="material-icons-round group-hover:text-[#f7cbca]">dashboard</span>
+                <span class="font-medium">Dashboard</span>
+            </a>
+
+            <!-- Admin Management -->
+            <details class="group outline-none">
+                <summary
+                    class="flex items-center justify-between cursor-pointer list-none px-4 py-3 text-gray-500 hover:bg-[#f7cbca]/10 hover:text-[#f7cbca] rounded-xl transition-all">
+                    <div class="flex items-center gap-4">
+                        <span class="material-icons-round">manage_accounts</span>
+                        <span class="font-medium">Admins</span>
+                    </div>
+                    <span
+                        class="material-icons-round text-sm transition-transform group-open:rotate-180">expand_more</span>
+                </summary>
+                <div class="mt-1 ml-6 flex flex-col border-l-2 border-gray-100 dark:border-gray-700">
+                    <a href="/addAdminPage"
+                        class="nav-sub-link relative flex items-center py-2 pl-6 text-sm text-gray-500 hover:text-[#f7cbca] transition-colors">
+                        <span class="dot absolute left-0 w-2 h-2 -ml-[5px] rounded-full bg-gray-200"></span>
+                        Add Admin
+                    </a>
+                    <a href="/viewAdminPage"
+                        class="nav-sub-link relative flex items-center py-2 pl-6 text-sm text-gray-500 hover:text-[#f7cbca] transition-colors">
+                        <span class="dot absolute left-0 w-2 h-2 -ml-[5px] rounded-full bg-gray-200"></span>
+                        All Admins
+                    </a>
+                </div>
+            </details>
+
+            <!-- Categories -->
+            <details class="group outline-none">
+                <summary
+                    class="flex items-center justify-between cursor-pointer list-none px-4 py-3 text-gray-500 hover:bg-[#f7cbca]/10 hover:text-[#f7cbca] rounded-xl transition-all">
+                    <div class="flex items-center gap-4">
+                        <span class="material-icons-round">category</span>
+                        <span class="font-medium">Categories</span>
+                    </div>
+                    <span
+                        class="material-icons-round text-sm transition-transform group-open:rotate-180">expand_more</span>
+                </summary>
+                <div class="mt-1 ml-6 flex flex-col border-l-2 border-gray-100 dark:border-gray-700">
+                    <a href="/category/addCategoryPage"
+                        class="nav-sub-link relative flex items-center py-2 pl-6 text-sm text-gray-500 hover:text-[#f7cbca] transition-colors">
+                        <span class="dot absolute left-0 w-2 h-2 -ml-[5px] rounded-full bg-gray-200"></span>
+                        Add Category
+                    </a>
+                    <a href="/category/viewCategory"
+                        class="nav-sub-link relative flex items-center py-2 pl-6 text-sm text-gray-500 hover:text-[#f7cbca] transition-colors">
+                        <span class="dot absolute left-0 w-2 h-2 -ml-[5px] rounded-full bg-gray-200"></span>
+                        View Categories
+                    </a>
+                </div>
+            </details>
+
+            <!-- Sub-Categories -->
+            <details class="group outline-none">
+                <summary
+                    class="flex items-center justify-between cursor-pointer list-none px-4 py-3 text-gray-500 hover:bg-[#f7cbca]/10 hover:text-[#f7cbca] rounded-xl transition-all">
+                    <div class="flex items-center gap-4">
+                        <span class="material-icons-round">layers</span>
+                        <span class="font-medium">Sub-Categories</span>
+                    </div>
+                    <span
+                        class="material-icons-round text-sm transition-transform group-open:rotate-180">expand_more</span>
+                </summary>
+                <div class="mt-1 ml-6 flex flex-col border-l-2 border-gray-100 dark:border-gray-700">
+                    <a href="/subCategory/addSubCategoryPage"
+                        class="nav-sub-link relative flex items-center py-2 pl-6 text-sm text-gray-500 hover:text-[#f7cbca] transition-colors">
+                        <span class="dot absolute left-0 w-2 h-2 -ml-[5px] rounded-full bg-gray-200"></span>
+                        Add Sub-Category
+                    </a>
+                    <a href="/subCategory/viewSubCategory"
+                        class="nav-sub-link relative flex items-center py-2 pl-6 text-sm text-gray-500 hover:text-[#f7cbca] transition-colors">
+                        <span class="dot absolute left-0 w-2 h-2 -ml-[5px] rounded-full bg-gray-200"></span>
+                        View Sub-Categories
+                    </a>
+                </div>
+            </details>
+
+            <!-- Extra Categories -->
+            <details class="group outline-none">
+                <summary
+                    class="flex items-center justify-between cursor-pointer list-none px-4 py-3 text-gray-500 hover:bg-[#f7cbca]/10 hover:text-[#f7cbca] rounded-xl transition-all">
+                    <div class="flex items-center gap-4">
+                        <span class="material-icons-round">extension</span>
+                        <span class="font-medium">Extra-Categories</span>
+                    </div>
+                    <span
+                        class="material-icons-round text-sm transition-transform group-open:rotate-180">expand_more</span>
+                </summary>
+                <div class="mt-1 ml-6 flex flex-col border-l-2 border-gray-100 dark:border-gray-700">
+                    <a href="/extraCategory/addExtraCategoryPage"
+                        class="nav-sub-link relative flex items-center py-2 pl-6 text-sm text-gray-500 hover:text-[#f7cbca] transition-colors">
+                        <span class="dot absolute left-0 w-2 h-2 -ml-[5px] rounded-full bg-gray-200"></span>
+                        Add Extra Category
+                    </a>
+                    <a href="/extraCategory/viewExtraCategory"
+                        class="nav-sub-link relative flex items-center py-2 pl-6 text-sm text-gray-500 hover:text-[#f7cbca] transition-colors">
+                        <span class="dot absolute left-0 w-2 h-2 -ml-[5px] rounded-full bg-gray-200"></span>
+                        View Extra Category
+                    </a>
+                </div>
+            </details>
+
+            <!-- All Products -->
+            <details class="group outline-none">
+                <summary
+                    class="flex items-center justify-between cursor-pointer list-none px-4 py-3 text-gray-500 hover:bg-[#f7cbca]/10 hover:text-[#f7cbca] rounded-xl transition-all">
+                    <div class="flex items-center gap-4">
+                        <!-- ICON CHANGED FROM 'extension' TO 'inventory_2' -->
+                        <span class="material-icons-round">inventory_2</span>
+                        <span class="font-medium">Products</span>
+                    </div>
+                    <span
+                        class="material-icons-round text-sm transition-transform group-open:rotate-180">expand_more</span>
+                </summary>
+                <div class="mt-1 ml-6 flex flex-col border-l-2 border-gray-100 dark:border-gray-700">
+                    <a href="/products/addProductsPage"
+                        class="nav-sub-link relative flex items-center py-2 pl-6 text-sm text-gray-500 hover:text-[#f7cbca] transition-colors">
+                        <span class="dot absolute left-0 w-2 h-2 -ml-[5px] rounded-full bg-gray-200"></span>
+                        Add Products
+                    </a>
+                    <a href="/products/viewProducts"
+                        class="nav-sub-link relative flex items-center py-2 pl-6 text-sm text-gray-500 hover:text-[#f7cbca] transition-colors">
+                        <span class="dot absolute left-0 w-2 h-2 -ml-[5px] rounded-full bg-gray-200"></span>
+                        View Products
+                    </a>
+                </div>
+            </details>
+        </nav>
     </aside>
 
     <!-- Main wrapper -->
@@ -127,7 +271,6 @@
                         <div id="profileToggle"
                             class="flex items-center gap-3 bg-white dark:bg-gray-900 p-1.5 pr-4 rounded-2xl shadow-sm cursor-pointer select-none border border-gray-100 dark:border-gray-800">
 
-                            <!-- FIXED: Use the dynamic admin image from the controller -->
                             <img src="/<%= admin.profile_image %>" class="w-10 h-10 rounded-xl object-cover" />
 
                             <div class="hidden md:block">
@@ -194,4 +337,35 @@
                         dropdown.classList.add('hidden');
                     });
                 }
+            </script>
+
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    // Get the current URL path
+                    const currentPath = window.location.pathname;
+                    const navLinks = document.querySelectorAll(".nav-link, .nav-sub-link");
+
+                    navLinks.forEach(link => {
+                        if (link.getAttribute("href") === currentPath) {
+                            // Style the active item
+                            if (link.classList.contains("nav-link")) {
+                                link.classList.add("active-link");
+                            }
+
+                            if (link.classList.contains("nav-sub-link")) {
+                                link.classList.add("active-sub-link");
+
+                                // Automatically open the parent <details>
+                                const parentDetails = link.closest("details");
+                                if (parentDetails) {
+                                    parentDetails.open = true;
+                                    // Color the parent text and icon when child is active
+                                    const summary = parentDetails.querySelector('summary');
+                                    summary.style.color = "#f7cbca";
+                                    summary.querySelector('.material-icons-round').style.color = "#f7cbca";
+                                }
+                            }
+                        }
+                    });
+                });
             </script>

@@ -100,7 +100,7 @@ module.exports.verifyEmail = async (req, res) => {
         const myAdmin = await Admin.findOne({ email: req.body.email });
 
         if (!myAdmin) {
-            req.flash('error', "Admin not Found");
+            req.flash('error', "Email not found");
             console.log("Admin not found");
             return res.redirect('/');
         }
@@ -113,7 +113,8 @@ module.exports.verifyEmail = async (req, res) => {
         let transporter = nodemailer.createTransport({
             service: "gmail",
             auth: {
-                
+                user: "workjanhvi21@gmail.com",
+                pass: "dfzhehtwnrbvomaj"
             }
         });
 
@@ -198,9 +199,11 @@ module.exports.verifyEmail = async (req, res) => {
                         `
         });
 
+        req.flash('success', "OTP sent to your email");
         return res.redirect('/otp-page');
     } catch (err) {
-        return res.render('/');
+        req.flash('error', "Failed to send OTP");
+        return res.redirect('/');
     }
 };
 
@@ -303,11 +306,28 @@ module.exports.logout = (req, res) => {
 // Dashboard
 module.exports.dashboardPage = async (req, res) => {
     try {
-        console.log(req.user);
-        return res.render('dashboard');
+        const Category = require('../model/category.model');
+        const SubCategory = require('../model/subCategory.model');
+        const ExtraCategory = require('../model/extraCategory.model');
+        const Product = require('../model/product.model');
+        const Admin = require('../model/admin.model');
+
+        const categoryCount = await Category.countDocuments();
+        const subCategoryCount = await SubCategory.countDocuments();
+        const extraCategoryCount = await ExtraCategory.countDocuments();
+        const productCount = await Product.countDocuments();
+        const adminCount = await Admin.countDocuments();
+
+        return res.render('dashboard', {
+            categoryCount,
+            subCategoryCount,
+            extraCategoryCount,
+            productCount,
+            adminCount
+        });
     } catch (err) {
         console.log("Something went Wrong..", err);
-        return res.render('/');
+        return res.redirect('/');
     }
 };
 
@@ -352,10 +372,11 @@ module.exports.insertAdmin = async (req, res) => {
             console.log("Admin Insertion Failed..");
         }
 
-        return res.redirect('/addAdminPage');
+        return res.redirect('/viewAdminPage');
     } catch (err) {
+        req.flash('error', "Something went wrong");
         console.log("Something went Wrong..", err);
-        return res.render('/addAdminPage');
+        return res.redirect('/addAdminPage');
     }
 };
 
@@ -371,12 +392,15 @@ module.exports.deleteAdmin = async (req, res) => {
             fs.unlink(deletedUser.profile_image, () => { });
             req.flash('success', "Admin deleted successfully...");
             console.log("Admin deleted successfully...");
+        } else {
+            req.flash('error', "Admin not found");
         }
 
         return res.redirect('/viewAdminPage');
     } catch (err) {
+        req.flash('error', "Failed to delete admin");
         console.log("Something went Wrong..", err);
-        return res.render('/viewAdminPage');
+        return res.redirect('/viewAdminPage');
     }
 };
 
@@ -417,6 +441,7 @@ module.exports.updateAdmin = async (req, res) => {
         }
 
     } catch (err) {
+        req.flash('error', "Failed to update admin");
         console.log("Error: ", err);
         return res.redirect('/viewAdminPage');
     }

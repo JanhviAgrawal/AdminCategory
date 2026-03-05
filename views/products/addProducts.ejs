@@ -1,0 +1,163 @@
+<%- include('../header') %>
+    <main class="flex-1 p-6 md:px-10 pb-10 flex justify-center bg-gray-50/50 dark:bg-[#0B0F1A]">
+        <div class="bg-white dark:bg-gray-900 w-full max-w-2xl rounded-[2.5rem] shadow-xl border p-8 md:p-12 mt-10">
+            <div class="mb-10 text-center">
+                <h2 class="text-3xl font-black text-slate-800 dark:text-white uppercase">Add New Product</h2>
+            </div>
+
+            <form class="space-y-6" action="/products/addProducts" method="POST" enctype="multipart/form-data">
+                <!-- Image Upload -->
+                <div class="flex flex-col items-center mb-6">
+                    <div class="relative group">
+                        <div
+                            class="w-32 h-32 rounded-3xl border-4 border-dashed border-primary/30 flex items-center justify-center bg-gray-50 dark:bg-gray-800 overflow-hidden">
+                            <img id="imagePreview" class="hidden w-full h-full object-cover" />
+                            <span id="defaultIcon"
+                                class="material-symbols-outlined text-4xl text-gray-300">add_photo_alternate</span>
+                        </div>
+                        <label class="absolute -bottom-2 -right-2 bg-primary p-3 rounded-xl cursor-pointer shadow-lg">
+                            <input type="file" name="productImage" class="hidden" onchange="previewImage(event)"
+                                required />
+                            <span class="material-symbols-outlined text-sm">edit</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <!-- 1. Category -->
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-black uppercase text-slate-400">Category</label>
+                        <select name="category_id" id="category_id" onchange="fetchSubCategories()"
+                            class="w-full px-5 py-4 rounded-2xl bg-gray-50 dark:bg-gray-800 font-bold" required>
+                            <option value="">Select Category</option>
+                            <% allCategory.forEach(cat=> { %>
+                                <option value="<%= cat._id %>">
+                                    <%= cat.categoryName %>
+                                </option>
+                                <% }) %>
+                        </select>
+                    </div>
+
+                    <!-- 2. Sub Category -->
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-black uppercase text-slate-400">Sub Category</label>
+                        <select name="subCategory_id" id="subCategory_id" onchange="fetchExtraCategories()"
+                            class="w-full px-5 py-4 rounded-2xl bg-gray-50 dark:bg-gray-800 font-bold" required>
+                            <option value="">Select Sub Category </option>
+                        </select>
+                    </div>
+
+                    <!-- 3. Extra Category (New Fixed Field) -->
+                    <div class="space-y-1 md:col-span-2">
+                        <label class="text-[10px] font-black uppercase text-slate-400">Extra Category</label>
+                        <select name="extraCategory_id" id="extraCategory_id"
+                            class="w-full px-5 py-4 rounded-2xl bg-gray-50 dark:bg-gray-800 font-bold" required>
+                            <option value="">Select Extra Category</option>
+                        </select>
+                    </div>
+
+                    <!-- Product Details -->
+                    <div class="md:col-span-2">
+                        <label class="text-[10px] font-black uppercase text-slate-400">Product Name</label>
+                        <input name="productName" type="text"
+                            class="w-full px-5 py-4 rounded-2xl bg-gray-50 dark:bg-gray-800 font-bold"
+                            placeholder="Enter Product Name" required />
+                    </div>
+
+                    <div>
+                        <label class="text-[10px] font-black uppercase text-slate-400">Current Price</label>
+                        <input name="productPrice" type="number"
+                            class="w-full px-5 py-4 rounded-2xl bg-gray-50 dark:bg-gray-800 font-bold"
+                            placeholder="₹ 0.00" required />
+                    </div>
+
+                    <div>
+                        <label class="text-[10px] font-black uppercase text-slate-400">Old Price</label>
+                        <input name="productOldPrice" type="number"
+                            class="w-full px-5 py-4 rounded-2xl bg-gray-50 dark:bg-gray-800 font-bold"
+                            placeholder="₹ 0.00" required />
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-black uppercase text-slate-400">Stock</label>
+                        <input name="productStock" type="number"
+                            class="w-full px-5 py-4 rounded-2xl bg-gray-50 dark:bg-gray-800 font-bold"
+                            placeholder="Stock" required />
+                    </div>
+
+                    <div class="md:col-span-2">
+                        <label class="text-[10px] font-black uppercase text-slate-400">Description</label>
+                        <textarea name="productDescription"
+                            class="w-full px-5 py-4 rounded-2xl bg-gray-50 dark:bg-gray-800 font-bold" rows="3"
+                            placeholder="Tell us about the product..." required></textarea>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-end gap-4 pt-6">
+                    <a href="/products/viewProducts" class="text-xs font-bold text-slate-400 uppercase">Cancel</a>
+                    <button type="submit"
+                        class="px-8 py-4 bg-primary text-charcoal font-black rounded-2xl shadow-lg hover:scale-105 transition-all text-sm uppercase">Add
+                        Product</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        function previewImage(event) {
+            const preview = document.getElementById('imagePreview');
+            preview.src = URL.createObjectURL(event.target.files[0]);
+            preview.classList.remove('hidden');
+            document.getElementById('defaultIcon').classList.add('hidden');
+        }
+
+        async function fetchSubCategories() {
+            const catId = document.getElementById('category_id').value;
+            const subDropdown = document.getElementById('subCategory_id');
+            const extraDropdown = document.getElementById('extraCategory_id');
+
+            subDropdown.innerHTML = '<option value="">Loading...</option>';
+            extraDropdown.innerHTML = '<option value="">Select Sub Category First</option>';
+
+            const response = await fetch(`/extraCategory/getSubCategories/${catId}`);
+            const subs = await response.json();
+
+            subDropdown.innerHTML = '<option value="">Select Sub Category</option>';
+            subs.forEach(sub => {
+                subDropdown.innerHTML += `<option value="${sub._id}">${sub.subCategoryName}</option>`;
+            });
+        }
+
+        async function fetchExtraCategories() {
+            const subId = document.getElementById('subCategory_id').value;
+            const extraDropdown = document.getElementById('extraCategory_id');
+
+            extraDropdown.innerHTML = '<option value="">Loading...</option>';
+
+            const response = await fetch(`/products/getExtraCategories/${subId}`);
+            const extras = await response.json();
+
+            extraDropdown.innerHTML = '<option value="">Select Extra Category</option>';
+            extras.forEach(extra => {
+                extraDropdown.innerHTML += `<option value="${extra._id}">${extra.extraCategoryName}</option>`;
+            });
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.18/dist/sweetalert2.all.min.js"></script>
+    <script>
+        <% if (locals.flash && locals.flash.success && locals.flash.success.length > 0) { %>
+        Swal.fire({
+            title: "Success!",
+            text: "<%= locals.flash.success %>",
+            icon: "success"
+        });
+        <% } %>
+
+        <% if (locals.flash && locals.flash.error && locals.flash.error.length > 0) { %>
+        Swal.fire({
+            title: "Error!",
+            text: "<%= locals.flash.error %>",
+            icon: "error"
+        });
+        <% } %>
+    </script>

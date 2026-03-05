@@ -5,7 +5,8 @@ const Admin = require('../model/admin.model');
 
 passport.use('localAuth', new localStrategy({
     usernameField: "email",
-}, async (email, password, done) => {
+    passReqToCallback: true
+}, async (req, email, password, done) => {
     console.log("Email : ", email);
     console.log("Password : ", password);
 
@@ -13,12 +14,12 @@ passport.use('localAuth', new localStrategy({
 
     if (!admin) {
         console.log("Admin not found");
-        return done(null, false);
+        return done(null, false, { message: 'Email not found' });
     }
 
     if (password !== admin.password) {
         console.log("Password is wrong");
-        return done(null, false);
+        return done(null, false, { message: 'Incorrect password' });
     }
 
     return done(null, admin);
@@ -81,3 +82,4 @@ passport.isOtpVerified = (req, res, next) => {
     }
     return res.redirect('/otp-page');
 }
+

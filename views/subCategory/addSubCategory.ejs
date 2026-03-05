@@ -1,0 +1,98 @@
+<%- include('../header') %>
+    <main class="flex-1 p-6 md:px-10 pb-10 flex justify-center bg-gray-50/50 dark:bg-[#0B0F1A]">
+        <div
+            class="bg-white dark:bg-gray-900 w-full max-w-2xl rounded-[2.5rem] shadow-xl border border-gray-100 dark:border-gray-800 p-8 md:p-12 self-start mt-10">
+
+            <div class="mb-10 text-center">
+                <h2 class="text-3xl font-black text-slate-800 dark:text-white uppercase tracking-tighter">Add Sub
+                    Category</h2>
+            </div>
+
+            <form class="space-y-8" action="/subCategory/addSubCategory" method="POST" enctype="multipart/form-data">
+                <!-- IMAGE UPLOAD -->
+                <div class="flex flex-col items-center justify-center">
+                    <div class="relative group">
+                        <div
+                            class="w-40 h-40 rounded-3xl border-4 border-dashed border-primary/30 dark:border-gray-700 flex items-center justify-center bg-gray-50 dark:bg-gray-800 overflow-hidden shadow-inner">
+                            <span id="defaultIcon"
+                                class="material-symbols-outlined text-5xl text-gray-300">category</span>
+                            <img id="imagePreview" class="hidden w-full h-full object-cover" />
+                        </div>
+                        <label
+                            class="absolute -bottom-4 -right-4 bg-primary text-charcoal p-4 rounded-2xl shadow-xl cursor-pointer hover:scale-110 transition-all">
+                            <span class="material-symbols-outlined">photo_camera</span>
+                            <input type="file" name="subCategoryImage" class="hidden" accept="image/*"
+                                onchange="previewImage(event)" required />
+                        </label>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 gap-6">
+                    <!-- PARENT SELECTION -->
+                    <div class="space-y-2">
+                        <label class="text-xs font-black uppercase tracking-widest text-slate-400 ml-2">Parent
+                            Category</label>
+                        <select name="category_id"
+                            class="w-full px-6 py-4 rounded-2xl bg-gray-50 dark:bg-gray-800 border-none outline-none appearance-none font-bold text-slate-700 dark:text-gray-200 focus:ring-2 focus:ring-primary/20 transition-all"
+                            required>
+                            <option value="" disabled selected>Select Parent Category</option>
+                            <% allCategory.forEach((category)=> { %>
+                                <option value="<%= category._id %>">
+                                    <%= category.categoryName %>
+                                </option>
+                                <% }) %>
+                        </select>
+                    </div>
+
+                    <!-- NAME -->
+                    <div class="space-y-2">
+                        <label class="text-xs font-black uppercase tracking-widest text-slate-400 ml-2">Sub Category
+                            Name</label>
+                        <input name="subCategoryName" type="text"
+                            class="w-full px-6 py-4 rounded-2xl bg-gray-50 dark:bg-gray-800 border-none outline-none font-bold text-slate-700 dark:text-gray-200 focus:ring-2 focus:ring-primary/20 transition-all"
+                            placeholder="e.g. Nike Jordan" required />
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-end gap-6 pt-6">
+                    <a href="/subCategory/viewSubCategory"
+                        class="text-xs font-bold uppercase tracking-widest text-slate-400 hover:text-slate-900 transition-colors">Cancel</a>
+                    <button type="submit"
+                        class="px-10 py-4 bg-primary text-charcoal font-black rounded-2xl shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-all uppercase tracking-widest text-sm">
+                        Create Sub Category
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        function previewImage(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const preview = document.getElementById('imagePreview');
+            const icon = document.getElementById('defaultIcon');
+            preview.src = URL.createObjectURL(file);
+            preview.classList.remove('hidden');
+            icon.classList.add('hidden');
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.18/dist/sweetalert2.all.min.js"></script>
+    <script>
+        <% if (locals.flash && locals.flash.success && locals.flash.success.length > 0) { %>
+        Swal.fire({
+            title: "Success!",
+            text: "<%= locals.flash.success %>",
+            icon: "success"
+        });
+        <% } %>
+
+        <% if (locals.flash && locals.flash.error && locals.flash.error.length > 0) { %>
+        Swal.fire({
+            title: "Error!",
+            text: "<%= locals.flash.error %>",
+            icon: "error"
+        });
+        <% } %>
+    </script>

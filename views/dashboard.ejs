@@ -83,32 +83,73 @@
             </button>
         </div>
 
-        <!-- Stats Cards -->
-        <div class="col-span-12 md:col-span-6 lg:col-span-3">
-            <div class="bg-white dark:bg-gray-900 p-6 rounded-3xl shadow-sm">
-                <p class="text-gray-500 text-sm">Monthly Profit</p>
-                <h4 class="text-2xl font-bold dark:text-white">$24,042,000</h4>
-            </div>
-        </div>
+        <!-- 5-Box Metric Row -->
+        <div class="col-span-12">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
 
-        <div class="col-span-12 md:col-span-6 lg:col-span-3">
-            <div class="bg-white dark:bg-gray-900 p-6 rounded-3xl shadow-sm">
-                <p class="text-gray-500 text-sm">Workers Wage</p>
-                <h4 class="text-2xl font-bold dark:text-white">$8,402,000</h4>
-            </div>
-        </div>
+                <!-- 1. Total Categories -->
+                <div
+                    class="bg-white dark:bg-gray-900 p-6 rounded-3xl shadow-sm border border-transparent hover:border-primary/20 transition-all">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="material-icons-round text-primary text-sm">category</span>
+                        <p class="text-gray-500 dark:text-gray-400 text-xs font-bold uppercase tracking-wider">
+                            Categories</p>
+                    </div>
+                    <h4 class="text-3xl font-bold dark:text-white">
+                        <%= categoryCount %>
+                    </h4>
+                </div>
 
-        <div class="col-span-12 md:col-span-6 lg:col-span-3">
-            <div class="bg-white dark:bg-gray-900 p-6 rounded-3xl shadow-sm">
-                <p class="text-gray-500 text-sm">Avg Project Length</p>
-                <h4 class="text-2xl font-bold dark:text-white">2 Weeks</h4>
-            </div>
-        </div>
+                <!-- 2. Sub Categories -->
+                <div
+                    class="bg-white dark:bg-gray-900 p-6 rounded-3xl shadow-sm border border-transparent hover:border-primary/20 transition-all">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="material-icons-round text-blue-400 text-sm">account_tree</span>
+                        <p class="text-gray-500 dark:text-gray-400 text-xs font-bold uppercase tracking-wider">Sub Categories
+                        </p>
+                    </div>
+                    <h4 class="text-3xl font-bold dark:text-white">
+                        <%= subCategoryCount %>
+                    </h4>
+                </div>
 
-        <div class="col-span-12 md:col-span-6 lg:col-span-3">
-            <div class="bg-white dark:bg-gray-900 p-6 rounded-3xl shadow-sm">
-                <p class="text-gray-500 text-sm">Avg Income / Project</p>
-                <h4 class="text-2xl font-bold dark:text-white">$12,000</h4>
+                <!-- 3. Extra Categories -->
+                <div
+                    class="bg-white dark:bg-gray-900 p-6 rounded-3xl shadow-sm border border-transparent hover:border-primary/20 transition-all">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="material-icons-round text-purple-400 text-sm">layers</span>
+                        <p class="text-gray-500 dark:text-gray-400 text-xs font-bold uppercase tracking-wider">Extra Categories</p>
+                    </div>
+                    <h4 class="text-3xl font-bold dark:text-white">
+                        <%= extraCategoryCount %>
+                    </h4>
+                </div>
+
+                <!-- 4. Total Products -->
+                <div
+                    class="bg-white dark:bg-gray-900 p-6 rounded-3xl shadow-sm border border-transparent hover:border-primary/20 transition-all">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="material-icons-round text-emerald-400 text-sm">inventory_2</span>
+                        <p class="text-gray-500 dark:text-gray-400 text-xs font-bold uppercase tracking-wider">Products
+                        </p>
+                    </div>
+                    <h4 class="text-3xl font-bold dark:text-white">
+                        <%= productCount %>
+                    </h4>
+                </div>
+
+                <!-- 5. Active admins -->
+                <div
+                    class="bg-white dark:bg-gray-900 p-6 rounded-3xl shadow-sm border border-transparent hover:border-primary/20 transition-all">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="material-icons-round text-amber-400 text-sm">bolt</span>
+                        <p class="text-gray-500 dark:text-gray-400 text-xs font-bold uppercase tracking-wider">Admins</p>
+                    </div>
+                    <h4 class="text-3xl font-bold dark:text-white">
+                        <%= adminCount %>
+                    </h4>
+                </div>
+
             </div>
         </div>
 

@@ -1,4 +1,6 @@
 const express = require('express');
+
+require('dotenv').config();
 const path = require('path');
 require('./config/db.config');
 
@@ -18,7 +20,6 @@ app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }));
 app.set('views', path.join(__dirname, 'views'));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
 
 app.use(cookieparser());
 
@@ -41,10 +42,10 @@ app.use(setFlash);
 
 app.use('/', require('./routes/index'));
 
-app.listen(PORT, (err) => {
+app.listen(process.env.PORT, (err) => {
     if (err) {
         console.log("Server not Started", err);
         return;
     }
-    console.log("Server is Started on PORT ", PORT);
+    console.log("Server is Started on PORT ", process.env.PORT);
 });

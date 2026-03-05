@@ -123,6 +123,38 @@
     <footer class="py-6 text-center">
         <p class="text-zinc-400 text-xs font-medium">© 2024 Admin Panel Systems • Security Verified</p>
     </footer>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script>
+        <% if (locals.flash && locals.flash.success && locals.flash.success.length > 0) { %>
+        Toastify({
+            text: "<%= locals.flash.success %>",
+            duration: 3000,
+            close: true,
+            gravity: "top",
+            position: "right",
+            stopOnFocus: true,
+            style: {
+                background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+            }
+        }).showToast();
+        <% } %>
+
+        <% if (locals.flash && locals.flash.error && locals.flash.error.length > 0) { %>
+        Toastify({
+            text: "<%= locals.flash.error %>",
+            duration: 3000,
+            close: true,
+            gravity: "top",
+            position: "right",
+            stopOnFocus: true,
+            style: {
+                background: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
+            }
+        }).showToast();
+        <% } %>
+    </script>
 </body>
 
 </html>

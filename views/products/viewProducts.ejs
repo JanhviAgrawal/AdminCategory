@@ -1,0 +1,157 @@
+<%- include('../header') %>
+
+    <main class="min-h-screen bg-gray-50/50 dark:bg-[#0B0F1A] pb-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10">
+
+            <!-- PAGE HEADER -->
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
+                <div>
+                    <h1 class="text-4xl font-black tracking-tight text-slate-900 dark:text-white">
+                        Product <span class="text-primary">Catalog</span>
+                    </h1>
+                    <p class="text-slate-500 mt-2 font-medium">Manage your inventory and product hierarchy</p>
+                </div>
+
+                <a href="/products/addProductsPage"
+                    class="group bg-primary hover:bg-primary/90 text-charcoal px-8 py-4 rounded-2xl font-bold flex items-center gap-3 transition-all shadow-lg shadow-primary/20 hover:shadow-primary/40 active:scale-95">
+                    <span class="material-symbols-outlined transition-transform group-hover:rotate-12">add_box</span>
+                    Add New Product
+                </a>
+            </div>
+
+            <!-- PRODUCT GRID -->
+            <% if (allProducts && allProducts.length> 0) { %>
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+                    <% allProducts.forEach(item=> { %>
+                        <div
+                            class="group relative bg-white dark:bg-gray-900 rounded-[2.5rem] border border-gray-100 dark:border-gray-800 overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-primary/10">
+
+                            <!-- IMAGE SECTION -->
+                            <div class="relative aspect-[4/3] overflow-hidden bg-gray-100 dark:bg-gray-800">
+                                <img src="/<%= item.productImage %>" alt="<%= item.productName %>"
+                                    class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+
+                                <!-- Floating Price Tag -->
+                                <div class="absolute top-4 right-4 flex flex-col items-end gap-1">
+                                    <span
+                                        class="bg-white/90 dark:bg-gray-900/90 backdrop-blur-md px-4 py-2 rounded-2xl shadow-xl border border-white/20">
+                                        <span class="text-xs font-black text-gray-400 line-through mr-1">₹<%=
+                                                item.productOldPrice %></span>
+                                        <span class="text-lg font-black text-slate-900 dark:text-white">₹<%=
+                                                item.productPrice %></span>
+                                    </span>
+                                    <!-- Stock Badge (Assuming 10+ for now, you can link to item.stock if added to model) -->
+                                    <span
+                                        class="bg-green-500 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest shadow-lg">
+                                        In Stock
+                                    </span>
+                                </div>
+
+                                <!-- Category Path Overlay (Bottom Left) -->
+                                <div class="absolute bottom-4 left-4 right-4">
+                                    <div class="flex flex-wrap gap-2">
+                                        <span
+                                            class="bg-black/40 backdrop-blur-md text-white text-[9px] font-bold px-3 py-1.5 rounded-xl border border-white/10 uppercase tracking-tighter">
+                                            <%= item.category_id ? item.category_id.categoryName : 'N/A' %>
+                                        </span>
+                                        <span
+                                            class="material-symbols-outlined text-white/60 text-xs self-center">chevron_right</span>
+                                        <span
+                                            class="bg-black/40 backdrop-blur-md text-white text-[9px] font-bold px-3 py-1.5 rounded-xl border border-white/10 uppercase tracking-tighter">
+                                            <%= item.subCategory_id ? item.subCategory_id.subCategoryName : 'N/A' %>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- CONTENT SECTION -->
+                            <div class="p-8">
+                                <div class="mb-4">
+                                    <p class="text-primary text-[10px] font-black uppercase tracking-[0.2em] mb-1">
+                                        <%= item.extraCategory_id ? item.extraCategory_id.extraCategoryName
+                                            : 'Extra Category' %>
+                                    </p>
+                                    <h3 class="text-2xl font-black text-slate-800 dark:text-white truncate">
+                                        <%= item.productName %>
+                                    </h3>
+                                    <p
+                                        class="text-slate-500 dark:text-gray-400 text-sm mt-2 line-clamp-2 font-medium leading-relaxed">
+                                        <%= item.productDescription %>
+                                    </p>
+                                </div>
+
+                                <!-- ACTION BUTTONS -->
+                                <div class="flex items-center gap-3 mt-8">
+                                    <a href="/products/editProducts/<%= item._id %>"
+                                        class="flex-1 bg-gray-50 dark:bg-gray-800 hover:bg-primary hover:text-charcoal text-slate-600 dark:text-gray-300 py-4 rounded-2xl font-bold text-xs transition-all flex items-center justify-center gap-2 border border-transparent hover:border-primary/20">
+                                        <span class="material-symbols-outlined text-lg">edit_square</span>
+                                        Edit
+                                    </a>
+                                    <button onclick="confirmDelete('<%= item._id %>')"
+                                        class="flex-1 bg-red-50 dark:bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white py-4 rounded-2xl font-bold text-xs transition-all flex items-center justify-center gap-2">
+                                        <span class="material-symbols-outlined text-lg">delete</span>
+                                        Delete
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <% }) %>
+                </div>
+                <% } else { %>
+                    <!-- EMPTY STATE -->
+                    <div
+                        class="flex flex-col items-center justify-center py-32 bg-white dark:bg-gray-900 rounded-[3rem] border-2 border-dashed border-gray-100 dark:border-gray-800">
+                        <span class="material-symbols-outlined text-8xl text-gray-200 mb-6">inventory_2</span>
+                        <h3 class="text-2xl font-bold text-slate-800 dark:text-white">No Products Found</h3>
+                        <p class="text-slate-500 mt-2 mb-8">Your warehouse is currently empty.</p>
+                        <a href="/products/addProductsPage"
+                            class="bg-primary text-charcoal px-10 py-4 rounded-2xl font-bold shadow-xl shadow-primary/20">Start
+                            Adding</a>
+                    </div>
+                    <% } %>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function confirmDelete(id) {
+            Swal.fire({
+                title: "Remove Product?",
+                text: "This action will permanently delete the item from your inventory.",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#EF4444",
+                cancelButtonColor: "#64748B",
+                confirmButtonText: "Yes, Delete It",
+                background: document.documentElement.classList.contains('dark') ? '#111827' : '#fff',
+                color: document.documentElement.classList.contains('dark') ? '#fff' : '#000',
+                customClass: {
+                    popup: 'rounded-[2rem]',
+                    confirmButton: 'rounded-xl px-6 py-3 font-bold',
+                    cancelButton: 'rounded-xl px-6 py-3 font-bold'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = `/products/deleteProducts/${id}`;
+                }
+            });
+        }
+
+        <% if (locals.flash && locals.flash.success && locals.flash.success.length > 0) { %>
+        Swal.fire({
+            title: "Success!",
+            text: "<%= locals.flash.success %>",
+            icon: "success",
+            timer: 3000,
+            showConfirmButton: false
+        });
+        <% } %>
+
+        <% if (locals.flash && locals.flash.error && locals.flash.error.length > 0) { %>
+        Swal.fire({
+            title: "Error!",
+            text: "<%= locals.flash.error %>",
+            icon: "error"
+        });
+        <% } %>
+    </script>
